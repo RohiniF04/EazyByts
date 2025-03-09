@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { User as SelectUser, InsertUser } from '@shared/schema';
 
 type LoginData = {
@@ -8,8 +8,6 @@ type LoginData = {
 
 type AuthContextType = {
   user: SelectUser | null;
-  isLoading?: boolean;
-  error?: Error | null;
   login: (data: LoginData) => Promise<void>;
   register: (data: InsertUser) => Promise<void>;
   logout: () => Promise<void>;
@@ -17,11 +15,10 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<SelectUser | null>(null);
 
   const login = async (data: LoginData) => {
-    console.log('Login attempt:', data);
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -45,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (data: InsertUser) => {
-    console.log('Register attempt:', data);
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -86,12 +82,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
+};
