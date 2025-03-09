@@ -4,6 +4,7 @@ import { insertUserSchema } from "@shared/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { Loader2 } from "lucide-react";
 
 // Extended schemas with validation
 const loginSchema = z.object({
@@ -37,6 +37,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function AuthPage() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<string>("login");
+  const { toast } = useToast();
 
   // Setup login form
   const loginForm = useForm<LoginFormValues>({
@@ -61,20 +62,48 @@ export default function AuthPage() {
   const handleLogin = async (data: LoginFormValues) => {
     try {
       console.log("Login data:", data);
-      // Mock login for now
-      // Will be implemented with real API calls later
+      
+      // Temporary login simulation
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting to dashboard...",
+      });
+      
+      // Simulate successful login
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 1500);
+      
     } catch (error) {
-      console.error("Login error:", error);
+      toast({
+        title: "Login Failed",
+        description: "Invalid username or password. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
   const handleRegister = async (data: RegisterFormValues) => {
     try {
       console.log("Register data:", data);
-      // Mock register for now
-      // Will be implemented with real API calls later
+      
+      // Temporary registration simulation
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created! Redirecting to dashboard...",
+      });
+      
+      // Simulate successful registration
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 1500);
+      
     } catch (error) {
-      console.error("Registration error:", error);
+      toast({
+        title: "Registration Failed",
+        description: "Could not create your account. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -82,7 +111,7 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-50 flex flex-col">
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
-          <a href="/" className="text-xl font-accent font-bold text-primary">
+          <a href="/" className="text-xl font-bold text-primary">
             Dev<span className="text-secondary">Portfolio</span>
           </a>
         </header>
@@ -256,23 +285,23 @@ export default function AuthPage() {
               <h3 className="text-xl font-semibold mb-4">Key Features:</h3>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                  <span className="text-primary mr-2">✓</span>
                   <span>Responsive design that looks great on all devices</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                  <span className="text-primary mr-2">✓</span>
                   <span>Showcase your projects with custom galleries</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                  <span className="text-primary mr-2">✓</span>
                   <span>Highlight your technical skills and expertise</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                  <span className="text-primary mr-2">✓</span>
                   <span>Contact form for potential clients or employers</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                  <span className="text-primary mr-2">✓</span>
                   <span>Easy-to-use dashboard for content management</span>
                 </li>
               </ul>
