@@ -30,10 +30,8 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-4">
-          <Link href="/">
-            <a className="text-xl font-accent font-bold text-primary">
-              Dev<span className="text-secondary">Portfolio</span>
-            </a>
+          <Link href="/" className="text-xl font-accent font-bold text-primary">
+            Dev<span className="text-secondary">Portfolio</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -45,16 +43,12 @@ export default function Navbar() {
             <a href="#contact" className={`font-medium hover:text-primary transition-colors ${location === '/' ? '' : 'hidden'}`}>Contact</a>
             
             {user ? (
-              <Link href="/dashboard">
-                <a className="font-medium text-primary border border-primary rounded-md px-4 py-1 hover:bg-primary hover:text-white transition-colors">
-                  Dashboard
-                </a>
+              <Link href="/dashboard" className="font-medium text-primary border border-primary rounded-md px-4 py-1 hover:bg-primary hover:text-white transition-colors">
+                Dashboard
               </Link>
             ) : (
-              <Link href="/auth">
-                <a className="font-medium text-primary border border-primary rounded-md px-4 py-1 hover:bg-primary hover:text-white transition-colors">
-                  CMS Login
-                </a>
+              <Link href="/auth" className="font-medium text-primary border border-primary rounded-md px-4 py-1 hover:bg-primary hover:text-white transition-colors">
+                CMS Login
               </Link>
             )}
           </div>
@@ -79,16 +73,20 @@ export default function Navbar() {
             <a href="#contact" className={`block font-medium hover:text-primary transition-colors ${location === '/' ? '' : 'hidden'}`} onClick={handleLinkClick}>Contact</a>
             
             {user ? (
-              <Link href="/dashboard">
-                <a className="block font-medium text-primary mt-6" onClick={handleLinkClick}>
-                  Dashboard
-                </a>
+              <Link 
+                href="/dashboard" 
+                className="block font-medium text-primary mt-6" 
+                onClick={handleLinkClick}
+              >
+                Dashboard
               </Link>
             ) : (
-              <Link href="/auth">
-                <a className="block font-medium text-primary mt-6" onClick={handleLinkClick}>
-                  CMS Login
-                </a>
+              <Link 
+                href="/auth" 
+                className="block font-medium text-primary mt-6" 
+                onClick={handleLinkClick}
+              >
+                CMS Login
               </Link>
             )}
           </div>

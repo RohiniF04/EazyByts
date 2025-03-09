@@ -1,31 +1,23 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { User } from "@shared/schema";
 
 export default function Footer() {
-  // Use try-catch to handle potential issues with the query
-  let user = null;
-  try {
-    const { data } = useQuery({
-      queryKey: ["/api/profile"],
-      // Adding this option to prevent refetch on error
-      retry: false,
-      // Adding this option to prevent error from being thrown
-      useErrorBoundary: false
-    });
-    user = data;
-  } catch (error) {
-    console.log("Error fetching profile data:", error);
-  }
+  // Use safer query options
+  const { data: user } = useQuery<User | undefined>({
+    queryKey: ["/api/profile"],
+    retry: false,
+    enabled: true,
+    refetchOnWindowFocus: false
+  });
 
   return (
     <footer className="bg-gray-800 text-white py-10">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
-            <Link href="/">
-              <a className="text-xl font-accent font-bold text-white">
-                Dev<span className="text-secondary">Portfolio</span>
-              </a>
+            <Link href="/" className="text-xl font-accent font-bold text-white">
+              Dev<span className="text-secondary">Portfolio</span>
             </Link>
             <p className="mt-2 text-gray-400">© {new Date().getFullYear()} All rights reserved.</p>
           </div>
