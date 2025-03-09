@@ -19,15 +19,8 @@ type AuthContextType = {
 
 type LoginData = Pick<InsertUser, "username" | "password">;
 
-// Create a context with a default value
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  isLoading: true,
-  error: null,
-  loginMutation: {} as UseMutationResult<SelectUser, Error, LoginData>,
-  logoutMutation: {} as UseMutationResult<void, Error, void>,
-  registerMutation: {} as UseMutationResult<SelectUser, Error, InsertUser>,
-});
+// Create a context
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
@@ -153,5 +146,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 // Custom hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext);
+  if (!context) {
+    console.error('useAuth must be used within an AuthProvider');
+    // Return a dummy implementation to prevent app from crashing
+    return {
+      user: null,
+      isLoading: false,
+      error: new Error('Auth context not available'),
+      loginMutation: {
+        mutate: () => console.error('Auth not available yet'),
+        isPending: false
+      } as any,
+      registerMutation: {
+        mutate: () => console.error('Auth not available yet'),
+        isPending: false
+      } as any,
+      logoutMutation: {
+        mutate: () => console.error('Auth not available yet'),
+        isPending: false
+      } as any
+    };
+  }
   return context;
 }

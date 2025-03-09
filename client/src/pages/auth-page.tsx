@@ -36,7 +36,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
+  const auth = useAuth();
+  const { user, loginMutation, registerMutation } = auth;
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<string>("login");
 
@@ -68,20 +69,28 @@ export default function AuthPage() {
   });
 
   const handleLogin = async (data: LoginFormValues) => {
-    await loginMutation.mutateAsync(data);
+    try {
+      await loginMutation.mutate(data);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   const handleRegister = async (data: RegisterFormValues) => {
-    // Set sensible defaults for required fields that aren't in the form
-    const userData = {
-      ...data,
-      shortBio: "Web Developer",
-      bio: "Professional web developer with experience in modern web technologies.",
-      email: "",
-      phone: "",
-      location: "",
-    };
-    await registerMutation.mutateAsync(userData);
+    try {
+      // Set sensible defaults for required fields that aren't in the form
+      const userData = {
+        ...data,
+        shortBio: "Web Developer",
+        bio: "Professional web developer with experience in modern web technologies.",
+        email: "",
+        phone: "",
+        location: "",
+      };
+      await registerMutation.mutate(userData);
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   return (
