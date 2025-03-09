@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/lib/auth-provider";
 import { insertUserSchema } from "@shared/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,8 +36,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const auth = useAuth();
-  const { user, loginMutation, registerMutation } = auth;
+  const { user, login, register } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<string>("login");
 
@@ -70,7 +69,7 @@ export default function AuthPage() {
 
   const handleLogin = async (data: LoginFormValues) => {
     try {
-      await loginMutation.mutate(data);
+      await login(data);
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -87,7 +86,7 @@ export default function AuthPage() {
         phone: "",
         location: "",
       };
-      await registerMutation.mutate(userData);
+      await register(userData);
     } catch (error) {
       console.error("Registration error:", error);
     }
@@ -150,16 +149,8 @@ export default function AuthPage() {
                         <Button 
                           type="submit" 
                           className="w-full"
-                          disabled={loginMutation.isPending}
                         >
-                          {loginMutation.isPending ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Logging in...
-                            </>
-                          ) : (
-                            "Login"
-                          )}
+                          Login
                         </Button>
                       </form>
                     </Form>
@@ -244,16 +235,8 @@ export default function AuthPage() {
                         <Button 
                           type="submit" 
                           className="w-full"
-                          disabled={registerMutation.isPending}
                         >
-                          {registerMutation.isPending ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Creating account...
-                            </>
-                          ) : (
-                            "Create Account"
-                          )}
+                          Create Account
                         </Button>
                       </form>
                     </Form>
