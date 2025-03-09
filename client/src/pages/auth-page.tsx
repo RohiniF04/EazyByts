@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
-import { useAuth } from "@/lib/basic-auth";
 import { insertUserSchema } from "@shared/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,16 +35,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const { user, login, register } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<string>("login");
-
-  // Redirect to dashboard if user is already logged in
-  useEffect(() => {
-    if (user) {
-      setLocation("/dashboard");
-    }
-  }, [user, setLocation]);
 
   // Setup login form
   const loginForm = useForm<LoginFormValues>({
@@ -69,7 +60,9 @@ export default function AuthPage() {
 
   const handleLogin = async (data: LoginFormValues) => {
     try {
-      await login(data);
+      console.log("Login data:", data);
+      // Mock login for now
+      // Will be implemented with real API calls later
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -77,16 +70,9 @@ export default function AuthPage() {
 
   const handleRegister = async (data: RegisterFormValues) => {
     try {
-      // Set sensible defaults for required fields that aren't in the form
-      const userData = {
-        ...data,
-        shortBio: "Web Developer",
-        bio: "Professional web developer with experience in modern web technologies.",
-        email: "",
-        phone: "",
-        location: "",
-      };
-      await register(userData);
+      console.log("Register data:", data);
+      // Mock register for now
+      // Will be implemented with real API calls later
     } catch (error) {
       console.error("Registration error:", error);
     }
